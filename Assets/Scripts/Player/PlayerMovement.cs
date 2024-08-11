@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D _player;
 	private Vector2 _movementVector = Vector2.zero;
 
-
 	void Start()
     {
         _player = GetComponent<Rigidbody2D>();
@@ -21,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
 		if (_movementVector == Vector2.zero)
 			return;
 
-		_player.AddForce(_movementVector * _playerSpeed);
+		_player.AddForce(_playerSpeed * _movementVector);
 	}
 
 	private void OnMove(InputValue movementValue)
