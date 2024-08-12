@@ -3,17 +3,15 @@ using UnityEngine;
 
 namespace Assets.Scripts.Player
 {
-	[RequireComponent(typeof(PlayerAppearance))]
+	
 	public class PlayerAnimation : MonoBehaviour
 	{
 		private PlayerAppearance _playerAppearance;
 
 		private void Awake()
 		{
-			_playerAppearance = GetComponent<PlayerAppearance>();
+			_playerAppearance = new PlayerAppearance(this.transform);
 		}
-
-
 
 		private void Flip()
 		{

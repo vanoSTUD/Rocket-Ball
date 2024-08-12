@@ -1,18 +1,22 @@
 ﻿using Assets.Scripts.Enums;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 namespace Assets.Scripts.Player
 {
-	public class PlayerAppearance : MonoBehaviour
+	public class PlayerAppearance
 	{
-		private Dictionary<Avatars, SpriteRenderer> _avatars = new();
-		private Dictionary<Circles, SpriteRenderer> _circles = new();
+		private readonly Transform _player;
+		private readonly Dictionary<Avatars, SpriteRenderer> _avatars = new();
+		private readonly Dictionary<Circles, SpriteRenderer> _circles = new();
 
 		public Avatars CurrentAvatar {  get; private set; }
 
-		private void Awake()
-		{
+        public PlayerAppearance(Transform player)
+        {
+            _player = player;
+
 			FillAvatars();
 			FillCircles();
 
@@ -68,7 +72,7 @@ namespace Assets.Scripts.Player
 		{
 			string name = avatar.ToString();
 
-			SpriteRenderer output = transform.Find("Avatars").Find(name).GetComponent<SpriteRenderer>();
+			SpriteRenderer output = _player.Find("Avatars").Find(name).GetComponent<SpriteRenderer>();
 
 			return output;
 		}
@@ -94,7 +98,7 @@ namespace Assets.Scripts.Player
 
 			Debug.Log(name);
 
-			SpriteRenderer output = transform.Find("Circles").Find(name).GetComponent<SpriteRenderer>();
+			SpriteRenderer output = _player.Find("Circles").Find(name).GetComponent<SpriteRenderer>();
 
 			Debug.Log(output);
 
