@@ -7,14 +7,13 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
 	[SerializeField] private float _playerSpeed = 10;
-	
-	private PlayerLook _playerLook;
+	[SerializeField] private PlayerLook _playerLook;
+
     private Rigidbody2D _player;
 	private Vector2 _movementVector = Vector2.zero;
 
 	void Start()
     {
-		_playerLook = new PlayerLook(this.transform);
         _player = GetComponent<Rigidbody2D>();
     }
 

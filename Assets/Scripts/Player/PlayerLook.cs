@@ -1,31 +1,30 @@
 ﻿using UnityEngine;
+using Assets.Scripts.Enums;
 
 namespace Assets.Scripts.Player
 {
-	public class PlayerLook
+	[RequireComponent(typeof(PlayerAnimation))]
+	public class PlayerLook : MonoBehaviour
 	{
-		private readonly Transform _player;
-		private readonly float _angleRotation = 5f;
-		private readonly float _speedRotation = 7f;
-
+		private PlayerAnimation _playerAnimation;
 		private bool _isFlip = false;
 
-		public PlayerLook(Transform player)
-        {
-            _player = player;
-        }
+		private void Awake()
+		{
+			_playerAnimation = GetComponent<PlayerAnimation>();
+		}
 
 		public void HandleMovement(Vector2 movement)
 		{
 			if (movement.x > 0 && _isFlip == false)
 			{
 				_isFlip = true;
-				Flip();
+				_playerAnimation.Flip();
 			}
 			else if (movement.x < 0 && _isFlip == true)
 			{
 				_isFlip = false;
-				Flip();
+				_playerAnimation.Flip();
 			}
 
 			if (movement.y > 0)
@@ -39,35 +38,22 @@ namespace Assets.Scripts.Player
 		private void LookUp()
 		{
 			if (!_isFlip)
-				RotateAvatar(new Vector3(0, 0, -_angleRotation));
+				_playerAnimation.Look(LookDirections.Down);
 			else
-				RotateAvatar(new Vector3(0, 0, _angleRotation));
+				_playerAnimation.Look(LookDirections.Up);
 		}
 
 		private void LookDown()
 		{
 			if (!_isFlip)
-				RotateAvatar(new Vector3(0, 0, _angleRotation));
+				_playerAnimation.Look(LookDirections.Up);
 			else
-				RotateAvatar(new Vector3(0, 0, -_angleRotation));
+				_playerAnimation.Look(LookDirections.Down);
 		}
 
 		private void LookForward()
 		{
-			RotateAvatar(Vector3.zero);
+			_playerAnimation.Look(LookDirections.Forward);
 		}
-
-		private void RotateAvatar(Vector3 rotationAngle)
-		{
-			_player.rotation = Quaternion.Slerp(_player.rotation, Quaternion.Euler(rotationAngle), _speedRotation * Time.deltaTime);
-		}
-
-		private void Flip()
-		{
-			var currentScale = _player.localScale;
-			currentScale.x *= -1;
-			_player.localScale = currentScale;
-		}
-
 	}
 }

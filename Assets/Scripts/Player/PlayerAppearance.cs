@@ -1,21 +1,24 @@
 ﻿using Assets.Scripts.Enums;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using UnityEngine;
 
 namespace Assets.Scripts.Player
 {
-	public class PlayerAppearance
+	public class PlayerAppearance : MonoBehaviour
 	{
-		private readonly Transform _player;
+		private const string ObjectOfAvatars = "Avatars";
+		private const string ObjectOfCircles = "Circles";
+
 		private readonly Dictionary<Avatars, SpriteRenderer> _avatars = new();
 		private readonly Dictionary<Circles, SpriteRenderer> _circles = new();
+		private Transform _playerAppearance;
 
 		public Avatars CurrentAvatar {  get; private set; }
+		public Circles CurrentCircle {  get; private set; }
 
-        public PlayerAppearance(Transform player)
-        {
-            _player = player;
+		private void Awake()
+		{
+			_playerAppearance = transform;
 
 			FillAvatars();
 			FillCircles();
@@ -23,11 +26,24 @@ namespace Assets.Scripts.Player
 			SetStartingAppearance();
 		}
 
+		public Transform GiveAvatar()
+		{
+			return _playerAppearance.Find(ObjectOfAvatars).transform;
+		}
+
 		public void SetCircle(Circles circle)
 		{
-			var foundedCircle = _circles[circle];
+			if (circle == Circles.White || circle == Circles.Yellow)
+			{
+				_circles[circle].enabled = true;
+			}
+			else
+			{
+				_circles[CurrentCircle].enabled = false;
+				_circles[circle].enabled = true;
 
-			foundedCircle.enabled = true;
+				CurrentCircle = circle;
+			}
 		}
 
 		public void UnsetCircle(Circles circle)
@@ -46,11 +62,11 @@ namespace Assets.Scripts.Player
 		private void SetStartingAppearance()
 		{
 			Avatars startingAvatar = Avatars.Suarez;
-			CurrentAvatar = startingAvatar;
+			Circles startingCircle = Circles.Red;
 
 			SetAvatar(startingAvatar);
+			SetCircle(startingCircle);
 			SetCircle(Circles.White);
-			SetCircle(Circles.Red);
 		}
 
 		private void FillAvatars()
@@ -70,9 +86,9 @@ namespace Assets.Scripts.Player
 
 		private SpriteRenderer FindAvatar(Avatars avatar)
 		{
-			string name = avatar.ToString();
+			string avatarName = avatar.ToString();
 
-			SpriteRenderer output = _player.Find("Avatars").Find(name).GetComponent<SpriteRenderer>();
+			SpriteRenderer output = _playerAppearance.Find(ObjectOfAvatars).Find(avatarName).GetComponent<SpriteRenderer>();
 
 			return output;
 		}
@@ -92,18 +108,15 @@ namespace Assets.Scripts.Player
 			_circles.Add(circle, avatarSpriteRenderer);
 		}
 
-		private SpriteRenderer FindCircle(Circles avatar)
+		private SpriteRenderer FindCircle(Circles circle)
 		{
-			string name = avatar.ToString();
+			string circleName = circle.ToString();
 
-			Debug.Log(name);
-
-			SpriteRenderer output = _player.Find("Circles").Find(name).GetComponent<SpriteRenderer>();
-
-			Debug.Log(output);
+			SpriteRenderer output = _playerAppearance.Find(ObjectOfCircles).Find(circleName).GetComponent<SpriteRenderer>();
 
 			return output;
 		}
 
+		
 	}
 }

@@ -1,17 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Scripts.Player;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
 	public class KickManager : MonoBehaviour
 	{
-		private static readonly float _kickForce = 7;
-		private static readonly float _kickRadius = 0.25f;
+		private static readonly float _kickForce = 6;
+		private static readonly float _percentageIncreaseRadius = 0.15f;
 
-		public static void HandleKick(Transform kicker)
+		public static void HandleKick(Transform kicker, PlayerAnimation kickerAnimation)
 		{
+
 			if (kicker.TryGetComponent(out Rigidbody2D kikerRb) == false)
 				return;
+
+			kickerAnimation.ShowKick();
 
 			var targets = GetTargets(kicker);
 
@@ -24,7 +28,7 @@ namespace Assets.Scripts
 		private static List<Rigidbody2D> GetTargets(Transform kicker)
 		{
 			float kickerRadius = kicker.GetComponent<CircleCollider2D>().radius;
-			float overlapRarius = kickerRadius + _kickRadius;
+			float overlapRarius = kickerRadius + (kickerRadius * _percentageIncreaseRadius);
 
 			Collider2D[] colliders = Physics2D.OverlapCircleAll(kicker.position, overlapRarius);
 			List<Rigidbody2D> targets = new();
