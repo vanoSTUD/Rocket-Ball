@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.Enums;
 using Assets.Scripts.Player;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Managers
 {
 	public class PlayersAppearanceManager
 	{
@@ -19,7 +19,6 @@ namespace Assets.Scripts
 
 			else if (team == Teams.Blue)
 				playerAppearance.SetCircle(Circles.Blue);
-
 		}
 	}
 }

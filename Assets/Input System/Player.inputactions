@@ -22,6 +22,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Boost",
+                    "type": "Value",
+                    "id": "4632be81-0627-4497-a835-485c41806dda",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -165,6 +174,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Kick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5891128d-9c1f-458d-b43c-79229a2cc739",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Boost",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.Enums;
+using Assets.Scripts.Managers;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Assets.Scripts.Player
 {
@@ -9,12 +11,6 @@ namespace Assets.Scripts.Player
 		[SerializeField] private PlayerAppearance _playerAppearance;
 		[SerializeField] private PlayerAnimation _playerAnimation;
 
-		private void Start()
-		{
-			if (_playerAnimation == null)
-				throw new UnityException("playerAnimation is null");
-		}
-
 		private void Update()
 		{
 			if (Input.anyKey == false)
@@ -23,12 +19,6 @@ namespace Assets.Scripts.Player
 			ProcessAvatarChange();
 
 			ProcessTeamChange();
-		}
-
-		// Сalled when the user clicks on the space bar // New Input System
-		private void OnKick()
-		{
-			KickManager.HandleKick(transform, _playerAnimation);
 		}
 
 		private void ProcessAvatarChange()
@@ -63,6 +53,13 @@ namespace Assets.Scripts.Player
 		private void SetAvatar(Avatars avatar)
 		{
 			PlayersAppearanceManager.SetAvatar(avatar, _playerAppearance);
+		}
+
+
+		// Сalled when the user clicks on the space bar // New Input System
+		private void OnKick()
+		{
+			KickManager.HandleKick(transform, _playerAnimation);
 		}
 	}
 }

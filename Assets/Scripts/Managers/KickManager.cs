@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Managers
 {
-	public class KickManager : MonoBehaviour
+	public class KickManager
 	{
 		private static readonly float _kickForce = 6;
 		private static readonly float _percentageIncreaseRadius = 0.15f;

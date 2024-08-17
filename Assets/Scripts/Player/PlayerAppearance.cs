@@ -1,25 +1,24 @@
 ﻿using Assets.Scripts.Enums;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Player
 {
 	public class PlayerAppearance : MonoBehaviour
 	{
-		private const string ObjectOfAvatars = "Avatars";
-		private const string ObjectOfCircles = "Circles";
+		[SerializeField] private GameObject _objectOfAvatars;
+		[SerializeField] private GameObject _objectOfCircles;
 
-		private readonly Dictionary<Avatars, SpriteRenderer> _avatars = new();
-		private readonly Dictionary<Circles, SpriteRenderer> _circles = new();
-		private Transform _playerAppearance;
+		private readonly Dictionary<Avatars, GameObject> _avatars = new();
+		private readonly Dictionary<Circles, GameObject> _circles = new();
 
 		public Avatars CurrentAvatar {  get; private set; }
 		public Circles CurrentCircle {  get; private set; }
 
 		private void Awake()
 		{
-			_playerAppearance = transform;
-
 			FillAvatars();
 			FillCircles();
 
@@ -28,19 +27,19 @@ namespace Assets.Scripts.Player
 
 		public Transform GiveAvatar()
 		{
-			return _playerAppearance.Find(ObjectOfAvatars).transform;
+			return _objectOfAvatars.transform;
 		}
 
 		public void SetCircle(Circles circle)
 		{
 			if (circle == Circles.White || circle == Circles.Yellow)
 			{
-				_circles[circle].enabled = true;
+				_circles[circle].SetActive(true);
 			}
 			else
 			{
-				_circles[CurrentCircle].enabled = false;
-				_circles[circle].enabled = true;
+				_circles[CurrentCircle].SetActive(false);
+				_circles[circle].SetActive(true);
 
 				CurrentCircle = circle;
 			}
@@ -48,13 +47,13 @@ namespace Assets.Scripts.Player
 
 		public void UnsetCircle(Circles circle)
 		{
-			_circles[circle].enabled = false;
+			_circles[circle].SetActive(false);
 		}
 
 		public void SetAvatar(Avatars avatar)
 		{
-			_avatars[CurrentAvatar].enabled = false;
-			_avatars[avatar].enabled = true;
+			_avatars[CurrentAvatar].SetActive(false);
+			_avatars[avatar].SetActive(true);
 
 			CurrentAvatar = avatar;
 		}
@@ -71,52 +70,36 @@ namespace Assets.Scripts.Player
 
 		private void FillAvatars()
 		{
-			FillAvatar(Avatars.Injesta);
-			FillAvatar(Avatars.Messi);
-			FillAvatar(Avatars.Pele);
-			FillAvatar(Avatars.Suarez);
-		}
+			List<GameObject> objectsOfAvatars = _objectOfAvatars.GetComponentsInChildren<Transform>(true)
+				.Where(trm => trm.name != _objectOfAvatars.name)
+				.Select(trm => trm.gameObject)
+				.ToList();
 
-		private void FillAvatar(Avatars avatar)
-		{
-			SpriteRenderer avatarSpriteRenderer = FindAvatar(avatar);
+			foreach (Avatars avatar in Enum.GetValues(typeof(Circles)))
+			{
+				string avatarName = avatar.ToString();
+				GameObject avatarObject = objectsOfAvatars.Find(obj => obj.name == avatarName);
 
-			_avatars.Add(avatar, avatarSpriteRenderer);
-		}
-
-		private SpriteRenderer FindAvatar(Avatars avatar)
-		{
-			string avatarName = avatar.ToString();
-
-			SpriteRenderer output = _playerAppearance.Find(ObjectOfAvatars).Find(avatarName).GetComponent<SpriteRenderer>();
-
-			return output;
+				if (avatarObject != null)
+					_avatars.Add(avatar, avatarObject);
+			}
 		}
 
 		private void FillCircles()
 		{
-			FillCircle(Circles.White);
-			FillCircle(Circles.Yellow);
-			FillCircle(Circles.Blue);
-			FillCircle(Circles.Red);
+			List<GameObject> objectsOfCircles = _objectOfCircles.GetComponentsInChildren<Transform>(true)
+				.Where(trm => trm.name != _objectOfCircles.name)
+				.Select(trm => trm.gameObject)
+				.ToList();
+
+			foreach (Circles circle in Enum.GetValues(typeof(Circles)))
+			{
+				string circleName = circle.ToString();
+				GameObject circleObject = objectsOfCircles.Find(obj => obj.name == circleName);
+
+				if (circleObject != null)
+					_circles.Add(circle, circleObject);
+			}
 		}
-
-		private void FillCircle(Circles circle)
-		{
-			SpriteRenderer avatarSpriteRenderer = FindCircle(circle);
-
-			_circles.Add(circle, avatarSpriteRenderer);
-		}
-
-		private SpriteRenderer FindCircle(Circles circle)
-		{
-			string circleName = circle.ToString();
-
-			SpriteRenderer output = _playerAppearance.Find(ObjectOfCircles).Find(circleName).GetComponent<SpriteRenderer>();
-
-			return output;
-		}
-
-		
 	}
 }
