@@ -10,19 +10,28 @@ namespace Assets.Scripts.Player
 	public class PlayerBoost : MonoBehaviour
 	{
 		[SerializeField] private GameObject _boostPrefab;
+		[SerializeField] private PlayerMovement _playerMovement;
+		[SerializeField] private PlayerClient _player;
 
-		private BoostPool _boostPool;
-
-		public bool IsBoosting { get; private set; }
+		private ObjectPoolBase _boostPool;
 
 		private void Awake()
 		{
-			_boostPool = new BoostPool(_boostPrefab);
+			_boostPool = new ObjectPoolBase(_boostPrefab);
+
+			_playerMovement.Boost += Spawn;
+		}
+
+		private void OnDestroy()
+		{
+			_playerMovement.Boost -= Spawn;
 		}
 
 		public void Spawn()
 		{
+			Color boostColor = ColorManager.GetColorByTeam(_player.Team);
 			Boost boost = _boostPool.Get().GetComponent<Boost>();
+			boost.SetColor(boostColor);
 			boost.transform.position = transform.position;
 			boost.EndAnimationAction += OnEndAnimation;
 
@@ -32,17 +41,12 @@ namespace Assets.Scripts.Player
 				_boostPool.Release(boost.gameObject);
 			}
 		}
-
-		public void SetActive(bool isBoostActive)
-		{
-			IsBoosting = isBoostActive;
-		}
  
-		// called PlayerInput
+		// call PlayerInput
 		private void OnBoost(InputValue inputValue)
 		{
 			bool hasActive = Convert.ToBoolean(inputValue.Get<float>());
-			IsBoosting = hasActive;
+			_playerMovement.SetBoost(hasActive);
 		}
 	}
 }

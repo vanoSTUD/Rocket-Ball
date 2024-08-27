@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2226035262053369034}
   - component: {fileID: 8802498007455743365}
   m_Layer: 0
-  m_Name: Boost Blue
+  m_Name: Boost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: -628604517, guid: f1c6f78e5c1e11541a40b4c8cf190f72, type: 3}
-  m_Color: {r: 0.2509804, g: 0.6784314, b: 1, a: 1}
+  m_Color: {r: 0.9056604, g: 0.37166253, b: 0.37166253, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

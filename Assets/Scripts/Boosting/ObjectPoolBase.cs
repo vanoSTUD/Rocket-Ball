@@ -3,15 +3,15 @@ using UnityEngine.Pool;
 
 namespace Assets.Scripts.Boosting
 {
-	public class BoostPool
+	public class ObjectPoolBase
 	{
-        private GameObject _boostPrefab;
+        private GameObject _prefab;
 		private ObjectPool<GameObject> _pool;
 
-        public BoostPool(GameObject boostPrefab)
+        public ObjectPoolBase(GameObject prefab)
         {
-            _boostPrefab = boostPrefab;
-			_pool = new ObjectPool<GameObject>(OnCreated, OnGet, OnRelease, defaultCapacity: 150);
+            _prefab = prefab;
+			_pool = new ObjectPool<GameObject>(OnCreated, OnGet, OnRelease, defaultCapacity: 50);
         }
 
 		public GameObject Get()
@@ -26,7 +26,7 @@ namespace Assets.Scripts.Boosting
         
         private GameObject OnCreated()
         {
-            return GameObject.Instantiate(_boostPrefab);
+            return GameObject.Instantiate(_prefab);
         }
 
 		private void OnGet(GameObject boostPrefab)

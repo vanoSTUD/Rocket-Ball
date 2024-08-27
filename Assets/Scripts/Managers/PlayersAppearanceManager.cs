@@ -10,7 +10,7 @@ namespace Assets.Scripts.Managers
 			playerAppearance.SetAvatar(avatar);
 		}
 
-		public static void SetTeam(Teams team, PlayerAppearance playerAppearance)
+		public static void SetTeam(Teams team, PlayerClient player, PlayerAppearance playerAppearance)
 		{
 			playerAppearance.UnsetCircle(playerAppearance.CurrentCircle);
 
@@ -19,6 +19,8 @@ namespace Assets.Scripts.Managers
 
 			else if (team == Teams.Blue)
 				playerAppearance.SetCircle(Circles.Blue);
+
+			player.SetTeam(team);
 		}
 	}
 }

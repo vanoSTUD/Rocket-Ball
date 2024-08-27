@@ -1,4 +1,5 @@
 using Assets.Scripts.Player;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,31 +9,41 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
 	[SerializeField] private float _playerSpeed = 10;
-	[SerializeField] private float _playerBoostingSpeed = 15;
+	[SerializeField] private float _playerBoostingSpeed = 17;
+	[SerializeField] private PlayerClient _player;
+	[SerializeField] private Rigidbody2D _playerRb;
 	[SerializeField] private PlayerLook _playerLook;
 
-	private PlayerBoost _playerBoost;
-    private Rigidbody2D _player;
 	private Vector2 _movementVector = Vector2.zero;
 
-	void Start()
-    {
-        _player = GetComponent<Rigidbody2D>();
-		_playerBoost = GetComponent<PlayerBoost>();
-	}
+	public bool IsBoosting { get; private set; }
 
     private void FixedUpdate()
     {
+		ProccessMove();
+	}
+
+	public Action Boost;
+
+	public void SetBoost(bool hasBoost)
+	{
+		IsBoosting = hasBoost;
+	}
+
+	private void ProccessMove()
+	{
 		if (_movementVector == Vector2.zero)
 			return;
 
-		if (_playerBoost.IsBoosting)
+		if (IsBoosting)
 		{
-			_player.AddForce(_playerBoostingSpeed * _movementVector);
-			_playerBoost.Spawn();
+			_playerRb.AddForce(_playerBoostingSpeed * _movementVector);
+			Boost?.Invoke();
 		}
 		else
-			_player.AddForce(_playerSpeed * _movementVector);
+		{
+			_playerRb.AddForce(_playerSpeed * _movementVector);
+		}
 
 		_playerLook.HandleMovement(_movementVector);
 	}

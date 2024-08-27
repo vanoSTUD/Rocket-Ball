@@ -5,11 +5,12 @@ using UnityEngine.InputSystem;
 
 namespace Assets.Scripts.Player
 {
-	[RequireComponent(typeof(UnityEngine.InputSystem.PlayerInput))]
+	[RequireComponent(typeof(PlayerInput))]
 	public class PlayerActions : MonoBehaviour
 	{
 		[SerializeField] private PlayerAppearance _playerAppearance;
 		[SerializeField] private PlayerAnimation _playerAnimation;
+		[SerializeField] private PlayerClient _player;
 
 		private void Update()
 		{
@@ -47,7 +48,7 @@ namespace Assets.Scripts.Player
 		
 		private void SetTeam(Teams team)
 		{
-			PlayersAppearanceManager.SetTeam(team, _playerAppearance);
+			PlayersAppearanceManager.SetTeam(team, _player, _playerAppearance);
 		}
 
 		private void SetAvatar(Avatars avatar)
